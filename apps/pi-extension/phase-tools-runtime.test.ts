@@ -73,7 +73,7 @@ function createRuntime(initialTools: string[]) {
 }
 
 describe("Plannotator phase tool ownership", () => {
-	test("leaving planning removes only tools Plannotator added", async () => {
+	test("planning preserves tool changes made by other extensions", async () => {
 		const runtime = createRuntime([
 			"inspect",
 			"search",
@@ -81,7 +81,11 @@ describe("Plannotator phase tool ownership", () => {
 		]);
 		const context = createContext();
 		await runtime.run("session_start", context);
-		expect(runtime.getActiveTools()).toEqual(["inspect", "search"]);
+		expect(runtime.getActiveTools()).toEqual([
+			"inspect",
+			"search",
+			"plannotator_submit_plan",
+		]);
 
 		await runtime.commands.get("plannotator")?.handler("", context);
 		expect(runtime.getActiveTools()).toEqual([
@@ -92,6 +96,10 @@ describe("Plannotator phase tool ownership", () => {
 
 		runtime.setActiveTools(["search", "external_new", "plannotator_submit_plan"]);
 		await runtime.commands.get("plannotator")?.handler("", context);
-		expect(runtime.getActiveTools()).toEqual(["search", "external_new"]);
+		expect(runtime.getActiveTools()).toEqual([
+			"search",
+			"external_new",
+			"plannotator_submit_plan",
+		]);
 	});
 });

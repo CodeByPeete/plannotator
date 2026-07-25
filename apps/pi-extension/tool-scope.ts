@@ -6,10 +6,6 @@ export const PLAN_SUBMIT_TOOL = "plannotator_submit_plan";
 
 const ALLOWED_PLAN_EXTENSIONS = new Set<string>([".md", ".mdx"]);
 
-export function stripPlanningOnlyTools(tools: readonly string[]): string[] {
-	return tools.filter((tool) => tool !== PLAN_SUBMIT_TOOL);
-}
-
 export function applyPhaseTools(
 	activeTools: readonly string[],
 	previouslyAddedTools: readonly string[],
